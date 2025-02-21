@@ -45,7 +45,7 @@
       <header class="revenue p-20 mb-20">
         <h1>PRODUCTS</h1>
         <div class="cols-2">
-            <a href="./add-product.html" class="add-btn">+ Add Product</a>
+          <a href="./add-product.html" class="add-btn">+ Add Product</a>
           <input
             class="search-bar w-40"
             type="text"
@@ -186,10 +186,131 @@
               ></a>
             </div>
           </div>
-        </section>
+    </section>
+  </div>
+  
+  <!-- Inline Edit Form -->
+  <div id="edit-form-container" class="hidden">
+    <form id="edit-product-form" class="display-flex">
+      <div class="left-col">
+        <div class="best">
+          <h3><label for="edit-name">Product name</label></h3>
+          <input type="text" id="edit-name" placeholder="Enter product title" required />
+          
+          <h3><label for="edit-description">Description</label></h3>
+          <input type="text" id="edit-description" placeholder="Enter description" required />
+          
+          <h3>Product Image</h3>
+          <input type="text" id="edit-image" />
+          
+          <h3><label for="edit-category">Category</label></h3>
+          <select id="edit-category" class="dropdown1">
+            <option value="0">-- Select category --</option>
+            <option value="1">Bánh trứng gà non HongKong</option>
+            <option value="2">Say Cheese ĐẬM VỊ</option>
+            <option value="3">Say Cheese THƠM BÉO</option>
+            <option value="4">Say Cheese THANH MÁT</option>
+            <option value="5">Say Cheese CÓ GU</option>
+          </select>
+        </div>
       </div>
+      
+      <div class="right-col">
+        <div class="best" style="padding-bottom: 30px">
+          <div>
+            <h3><label for="edit-stock">Stock</label></h3>
+            <input type="text" id="edit-stock" placeholder="Quantity" required />
+          </div>
+          <div>
+            <h3><label for="edit-price">Price</label></h3>
+            <input type="text" id="edit-price" placeholder="Price" required />
+          </div>
+          <h3><label for="status">Tags</label></h3>
+          <div id="box-content">
+            <div>
+              <input type="checkbox" id="edit-new-item" name="tag" value="Món mới" />
+              <label for="edit-new-item">Món mới</label>
+            </div>
+            <div>
+              <input type="checkbox" id="edit-signature" name="tag" value="Đặc trưng" />
+              <label for="edit-signature">Đặc trưng</label>
+            </div>
+            <div>
+              <input type="checkbox" id="edit-best-seller" name="tag" value="Bán chạy" />
+              <label for="edit-best-seller">Bán chạy</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-buttons">
+          <button type="button" onclick="cancelEdit()" class="btn-cancel">Cancel</button>
+          <button type="submit" class="btn-submit">Save Changes</button>
+        </div>
+      </div>
+    </form>
+  </div>
     </main>
-    <!-- <script src="../app.js"></script> -->
+    
+    <!-- Inline Edit Form -->
+    <div id="editFormContainer" class="edit-form-container" style="display: none;">
+      <form class="display-flex">
+        <div class="left-col">
+          <div class="best">
+            <h3><label for="editName">Product name</label></h3>
+            <input type="text" id="editName" placeholder="Enter product title" required>
+            <h3><label for="editDescription">Description</label></h3>
+            <input type="text" id="editDescription" placeholder="Enter description" required>
+            <h3>Product Image</h3>
+            <input type="text" id="editImage">
+            <h3><label for="editCategory">Category</label></h3>
+            <select id="editCategory" class="dropdown1">
+              <option value="0">-- Select category --</option>
+              <option value="Say Cheese CÓ GU">Say Cheese CÓ GU</option>
+              <option value="Say Cheese ĐẬM VỊ">Say Cheese ĐẬM VỊ</option>
+              <option value="Say Cheese THANH MÁT">Say Cheese THANH MÁT</option>
+              <option value="Say Cheese THƠM BÉO">Say Cheese THƠM BÉO</option>
+              <option value="Bánh trứng gà non HongKong">Bánh trứng gà non HongKong</option>
+            </select>
+          </div>
+        </div>
+        <div class="right-col">
+          <div class="best" style="padding-bottom: 30px">
+            <div>
+              <h3><label for="editStock">Stock</label></h3>
+              <input type="text" id="editStock" placeholder="Quantity" required>
+            </div>
+            <div>
+              <h3><label for="editPrice">Price</label></h3>
+              <input type="text" id="editPrice" placeholder="Price" required>
+            </div>
+            <h3><label for="box-content">Tags</label></h3>
+            <div id="box-content">
+              <div>
+                <input type="checkbox" id="editNewItem" name="tag" value="Món mới">
+                <label for="editNewItem">Món mới</label>
+              </div>
+              <div>
+                <input type="checkbox" id="editSignature" name="tag" value="Đặc trưng">
+                <label for="editSignature">Đặc trưng</label>
+              </div>
+              <div>
+                <input type="checkbox" id="editBestSeller" name="tag" value="Bán chạy">
+                <label for="editBestSeller">Bán chạy</label>
+              </div>
+            </div>
+          </div>
+          <!-- <button type="button" style="float: right;" onclick="saveEdit()">Save Changes</button>
+          <button type="button" style="float: right; margin-right: 10px; background-color: transparent; color: var(--brand-color);" onclick="cancelEdit()">Cancel</button> -->
+        </div>
+      </form>
+    </div>
+
     <script src="../src/products.js"></script>
+    <script src="../app.js"></script>
+    <style>
+      .edit-form-container {
+        margin: 50px auto;
+        width: 90%;
+      }
+    </style>
   </body>
 </html>

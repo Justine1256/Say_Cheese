@@ -2,13 +2,13 @@
  * Interface for Product Data
  */
 interface Product {
-  id?: number;
+  id?: string;
   name: string;
   description: string;
   category: string;
   price: number;
   stock: number;
-  images: { url: string , alt: string}[];
+  images: { url: string; alt: string }[];
   likes: number;
   tags: string[];
   created_at: string;
@@ -16,13 +16,13 @@ interface Product {
 }
 
 interface Category {
-  id: number;
+  id: string;
   name: string;
 }
-let products: Product[] = [];
+var products: Product[] = [];
 
 // Number of products per page
-var productsPerPage = 10;
+var productsPerPage: number = 10;
 
 // Current page
 var currentPage = 1;
@@ -38,6 +38,11 @@ var endPageBtn = document.getElementById("end-btn") as HTMLElement;
  * @param data
  */
 function showBestSeller(data: any[]) {
+  var productList = document.getElementById("best-seller") as HTMLTableElement;
+
+  if (!productList) return;
+  productList.innerHTML = "";
+
   //Sắp xếp mảng sp theo "ordered"
   const sortedData = data.sort(
     (a: { ordered: number }, b: { ordered: number }) => {
@@ -47,9 +52,6 @@ function showBestSeller(data: any[]) {
   var startIndex = (currentPage - 1) * productsPerPage;
   var endIndex = startIndex + productsPerPage;
   var pageProducts = sortedData.slice(startIndex, endIndex);
-
-  var productList = document.getElementById("best-seller") as HTMLTableElement;
-  productList.innerHTML = "";
 
   pageProducts.forEach(function (product) {
     var row = document.createElement("tr");
@@ -105,12 +107,11 @@ function showBestSeller(data: any[]) {
     } to ${endIndex} of ${data.length} results`;
   }
   updatePagination(data);
-
 }
 
 /**
  * Function to update pagination buttons
- * @param data 
+ * @param data
  */
 function updatePagination(data: any[]) {
   var pagination = document.getElementById("product-pagination");
@@ -157,7 +158,6 @@ previousPageBtn.addEventListener("click", function (e) {
 nextPageBtn.addEventListener("click", function (e) {
   e.preventDefault();
   var totalPages = Math.ceil(products.length / productsPerPage);
-  console.log(totalPages);
 
   if (currentPage < totalPages) {
     currentPage++;
@@ -209,6 +209,9 @@ const showCategories = (data: Product[]) => {
   const categoriesList = document.getElementById(
     "categories"
   ) as HTMLTableElement;
+
+  if (!categoriesList) return;
+
   categoriesList.innerHTML = "";
   data.forEach((category) => {
     var row = document.createElement("tr");

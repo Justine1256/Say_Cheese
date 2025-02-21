@@ -295,11 +295,8 @@ tr:hover td {
     }
   }
   & .active {
-    border-color: var(--brand-color);
-    background-color: var(--brand-color);
-    color: #fff;
+    color: var(--brand-color);
   }
-  &
 }
 /* Search bar */
 .search-bar {
@@ -376,7 +373,7 @@ li {
     gap: 20px;
   }
   & th {
-  color: var(--primary-color);
+    color: var(--primary-color);
   }
   & tr .display-flex {
     gap: 10px;
@@ -437,11 +434,12 @@ li {
     height: unset !important;
     font-weight: unset;
     float: unset;
-    & :hover {
-      cursor: pointer;
-      border: none;
-    }
   }
+}
+.edit-btn:hover, .delete-btn:hover {
+  cursor: pointer;
+  border: none !important;
+  text-decoration: underline;
 }
 .aside-filter {
   color: var(--text-color) !important;
@@ -579,13 +577,14 @@ li {
 }
 
 /* ADMIN ADD PRODUCTS PAGE */
-#add-product {
+#add-product, .edit-form-container {
   & .best {
     background-color: transparent !important;
     border: 1px solid var(--background-color);
     color: var(--text-color);
   }
-  & input, select {
+  & input,
+  select {
     border-color: var(--background-color);
     color: var(--text-color);
   }
@@ -596,4 +595,21 @@ li {
     display: flex;
     justify-content: space-between;
   }
+}
+
+.hidden {
+  display: none;
+}
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.btn-cancel {
+  background: #ccc;
+}
+.btn-submit {
+  background: var(--brand-color);
+  color: white;
 }
