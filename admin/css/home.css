@@ -195,12 +195,12 @@ section {
   margin: 0 0 30px;
   height: fit-content;
 }
-.best {
+/* .best {
   padding: 10px 50px 50px;
   background-color: var(--background-color);
   margin: 30px auto 30px;
   color: var(--primary-color);
-}
+} */
 .revenue {
   background-color: transparent;
   border: 1px solid var(--background-color);
@@ -266,7 +266,6 @@ table {
 th,
 td {
   padding: 12px;
-  border-bottom: 1px solid #ddd;
   text-align: left;
   vertical-align: middle;
 }
@@ -274,8 +273,11 @@ th {
   font-weight: 500;
   min-width: 100px;
 }
-tr:hover td {
-  background-color: #f8f3e747;
+tbody tr {
+  border-bottom: 1px solid #ddd;
+  &:hover {
+    background-color: #f8f3e747;
+  }
 }
 .table-footer {
   display: flex;
@@ -357,11 +359,7 @@ li {
   & h3 {
     margin: 15px 0;
   }
-  & thead {
-    padding: 0 20px;
-    border-bottom: 1px solid #ddd;
-    background-color: var(--text-color);
-  }
+  
   & button:first-child {
     height: 40px;
     width: 20%;
@@ -436,7 +434,8 @@ li {
     float: unset;
   }
 }
-.edit-btn:hover, .delete-btn:hover {
+.edit-btn:hover,
+.delete-btn:hover {
   cursor: pointer;
   border: none !important;
   text-decoration: underline;
@@ -454,7 +453,7 @@ li {
   flex-direction: column;
   width: min-content;
   float: right;
-
+  padding-left: 5px;
   & a {
     background-color: #00000000;
     width: min-content;
@@ -568,6 +567,7 @@ li {
 .row-thumbnail {
   display: flex;
   gap: 10px;
+  width: 350px;
   & div {
     display: flex;
     flex-direction: column;
@@ -575,14 +575,15 @@ li {
     text-align: left;
   }
 }
-
+.background-transparent {
+  background-color: white !important;
+  border: 1px solid var(--background-color);
+  color: var(--text-color);
+}
 /* ADMIN ADD PRODUCTS PAGE */
-#add-product, .edit-form-container {
-  & .best {
-    background-color: transparent !important;
-    border: 1px solid var(--background-color);
-    color: var(--text-color);
-  }
+#add-product,
+.edit-form-container {
+  width: 80%;
   & input,
   select {
     border-color: var(--background-color);
@@ -612,4 +613,28 @@ li {
 .btn-submit {
   background: var(--brand-color);
   color: white;
+}
+
+#category-main, #orders-main {
+  margin: 50px auto;
+  & .search-bar, select {
+    border-color: var(--text-color) !important;
+    color: var(--text-color) !important;
+  }
+  & .search-bar::placeholder {
+    color: var(--text-color);
+  }
+  & table {
+    border: 1px solid #ddd;
+    margin-top: 30px;
+  }
+}
+#category-main, #products-main, #orders-main {
+  & thead {
+    padding: 0 20px;
+    border-bottom: 1px solid #ddd;
+    background-color: var(--text-color);
+    color: var(--primary-color);
+  }
+
 }

@@ -2,18 +2,27 @@
  * Interface for Product Data
  */
 interface Product {
-  id: number;
+  id?: string;
   name: string;
+  description: string;
   category: string;
   price: number;
-  images: { url: any }[];
-  description: string;
+  stock: number;
+  images: { url: string; alt: string }[];
+  likes: number;
+  tags: string[];
+  created_at: string;
+  ordered: number;
 }
 /**
  * Hiển thị danh sách sản phẩm
  */
 const alllist = document.querySelector("#alllist") as HTMLElement;
 const showProductList = (data: any[]) => {
+  if (!alllist) {
+    console.log("Element '#alllist' not found");
+    return;
+  }
   data.forEach((element) => {
     const prod = `
       <div class="product">
@@ -34,49 +43,6 @@ const showProductList = (data: any[]) => {
 };
 
 /**
- * Hiển thị danh sách 5 sản phẩm mới nhất
- */
-const newlist = document.querySelector("#newlist") as HTMLElement;
-const show5newest = (data: any[]) => {
-  //Sắp xếp mảng sp theo "created_at"
-  const sortedData = data.sort(
-    (a: { created_at: string }, b: { created_at: string }) => {
-      const aDate: Date = new Date(parseDate(a.created_at));
-      const bDate: Date = new Date(parseDate(b.created_at));
-      return bDate.getTime() - aDate.getTime();
-    }
-  );
-  const newest = sortedData.slice(-5);
-  console.log(newest);
-
-  newest.forEach((element) => {
-    const prod = `
-      <div class="product">
-        <a href="product-details.html?id=${element.id}">
-          <div class="overflow-hidden">
-            <img src="${element.images[0].url}" alt="" />
-            <img class="tag" src="../images/hot.png" alt="" />
-          </div>
-          <a href="#">${element.name}</a>
-          <a class="category-link" href="">${element.category}</a>
-          <p>${element.price}đ</p>
-          <button class="cartBtn" data="${element.id}">Thêm vào giỏ hàng</button>
-        </a>
-      </div>
-          `;
-    newlist.innerHTML += prod;
-  });
-};
-
-/**
- * Biến đổi kiểu date "dd/mm/yyyy" thành kiểu Date Object
- */
-function parseDate(date: string) {
-  const [day, month, year] = date.split("/").map(Number);
-  return new Date(year, month - 1, day);
-}
-
-/**
  * Hiển thị danh sách danh mục ở select
  */
 const showCateListMenu = (data: any[]) => {
@@ -94,22 +60,6 @@ const showCateListMenu = (data: any[]) => {
 };
 
 /**
- * Lấy dữ liệu bảng sản phẩm từ API và chạy hàm showProducts
- */
-async function getProducts() {
-  try {
-    const res = await fetch("http://localhost:3000/products");
-    const data = await res.json();
-
-    showProductList(data);
-    show5newest(data);
-  } catch (error) {
-    console.log("Error fetching products:", error);
-  }
-}
-getProducts();
-
-/**
  * Lấy dữ liệu bảng danh mục từ API và chạy hàm showCateListMenu
  */
 async function getCategories() {
@@ -123,8 +73,8 @@ async function getCategories() {
 }
 
 /**
-* Lấy param id từ url
-*/
+ * Lấy param id từ url
+ */
 const getProductId = (param: string): string | null => {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(param);
@@ -133,8 +83,8 @@ const getProductId = (param: string): string | null => {
 const id: string | null = getProductId("id");
 
 /**
-* Hiển thị chi tiết sản phẩm
-*/
+ * Hiển thị chi tiết sản phẩm
+ */
 const container = document.querySelector(".product-details") as HTMLElement;
 
 const showDetails = (data: Product): void => {
@@ -202,24 +152,24 @@ const showDetails = (data: Product): void => {
 };
 
 /**
-* Lấy dữ liệu chi tiết sản phẩm theo id
-*/
+ * Lấy dữ liệu chi tiết sản phẩm theo id
+ */
 async function getProductsDetails(): Promise<void> {
   if (!id) {
-      console.error("Product ID is not available.");
-      return;
+    console.log("Product ID is not available.");
+    return;
   }
 
   try {
-      const res = await fetch(`http://localhost:3000/products/${id}`);
-      if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-      }
-      const data: Product = await res.json();
-      console.log(data);
-      showDetails(data);
+    const res = await fetch(`http://localhost:3000/products/${id}`);
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    const data: Product = await res.json();
+    console.log(data);
+    showDetails(data);
   } catch (error) {
-      console.log("Error fetching product details:", error);
+    console.log("Error fetching product details:", error);
   }
 }
 

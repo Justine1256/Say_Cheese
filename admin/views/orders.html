@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="../css/home.css" />
     <!-- Chart -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   </head>
   <body>
     <nav>
@@ -40,9 +41,8 @@
           </a>
         </div> -->
     </nav>
-    <main class="container best">
+    <main class="container" id="orders-main">
       <h1>ORDERS</h1>
-      <hr />
       <form class="filter">
         <input
           class="search-bar"
@@ -66,6 +66,7 @@
         </select>
         <button>Filter</button>
       </form>
+
       <table>
         <thead>
           <tr>
@@ -78,22 +79,25 @@
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
+        <tbody id="alllist">
+          <!-- <tr>
             <td>id</td>
-            <td>name</td>
+            <td><a href="">Customer's name</a></td>
             <td>service</td>
             <td>date</td>
             <td>total</td>
             <td>
-              <span class="status active">status</span>
+              <select class="status-dropdown">
+                <option value="pending">Pending</option>
+                <option value="processing">Processing</option>
+                <option value="shipped">Shipped</option>
+                <option value="delivered">Delivered</option>
+              </select>
             </td>
             <td>
-              <a>View</a>
-              /
-              <a>Edit</a>
+              <a>View</a> / <a>Edit</a> / <button class="update-status edit-btn">Update</button>
             </td>
-          </tr>
+          </tr> -->
         </tbody>
       </table>
       <!-- <div class="table-footer">
@@ -106,5 +110,6 @@
         </div>
     </div> -->
     </main>
+    <script src="../src/orders.js"></script>
   </body>
 </html>

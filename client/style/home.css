@@ -453,6 +453,14 @@ nav ul ul a {
   display: flex;
   padding: 0 10px;
   overflow: hidden;
+  & button {
+    padding: 5px 10px;
+    width: min-content;
+    border: none;
+  & i {
+    font-size: 20px;
+  }
+  }
 }
 .best-prod > img {
   width: 120px;
@@ -480,6 +488,7 @@ nav ul ul a {
   display: flex;
   flex-direction: column;
   width: 216.8px;
+  justify-content: space-around;
   & a {
     max-height: 60px;
     overflow: hidden;
@@ -1165,5 +1174,37 @@ td {
   min-width: 150px;
   &:hover {
     background-color: var(--text-color);
+  }
+}
+
+.table-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  & span {
+    color: var(--text-color);
+  }
+  & a {
+    text-decoration: none;
+    padding: 5px 10px;
+    margin-left: 5px;
+    border: 1px solid #ddd;
+    &:hover {
+      /* background-color: #292929; */
+      border: 1px solid;
+    }
+  }
+  & .active {
+    color: var(--brand-color);
+  }
+}
+/* Search bar */
+.search-bar {
+  border: 1px solid var(--primary-color) !important;
+  background-color: #ffffff80;
+  color: var(--primary-color) !important;
+  /* width: 200px !important; */
+  & ::placeholder {
+    color: var(--primary-color) !important;
   }
 }

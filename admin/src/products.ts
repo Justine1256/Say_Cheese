@@ -84,6 +84,22 @@ const getSelectedTags = () => {
   return selectedValues;
 };
 
+/**
+ * Function to call API and show products
+ */
+async function APIGetProducts() {
+  try {
+    const res = await fetch("http://localhost:3000/products");
+    const data: Product[] = await res.json();
+    products = data; // Store fetched products for pagination
+    showProductList(data);
+    // console.log(products);
+  } catch (error) {
+    console.log("Error fetching products:", error);
+  }
+}
+APIGetProducts();
+
 function updatePaginationProd(data: any[]) {
   var pagination = document.getElementById("product-pagination");
   if (pagination) {
@@ -117,37 +133,10 @@ function updatePaginationProd(data: any[]) {
 }
 
 const showProductList = (data: Product[]) => {
-  if (!alllist) return;
-
   var startIndex = (currentPage - 1) * productsPerPage;
   var endIndex = startIndex + productsPerPage;
   var pageProducts = data.slice(startIndex, endIndex);
-
-  alllist.innerHTML = pageProducts
-    .map(
-      (element) => `
-    <tr>
-      <td>${element.id}</td>
-      <td class="display-flex row-thumbnail">
-        <img src="${element.images[0].url}" alt="" style="width: 50px" />
-        <div class="row-thumbnail">
-          <a>${element.name}</a>
-          <span>${element.category}</span>
-        </div>
-      </td>
-      <td style="color: var(--brand-color)">${element.stock}</td>
-      <td>${element.price}</td>
-      <td style="color: var(--brand-color)">${element.ordered}</td>
-      <td><span>${element.likes}</span></td>
-      <td>
-        <button class="edit-btn" onclick="showEditForm(${element.id})">Edit</button>
-        <button class="delete-btn" onclick="deleteProduct(${element.id})">Delete</button>
-      </td>
-    </tr>
-  `
-    )
-    .join("");
-
+  
   const productCountElement = document.getElementById("product-count");
   if (productCountElement) {
     productCountElement.textContent = `Showing ${
@@ -177,8 +166,8 @@ const showProductList = (data: Product[]) => {
       <td style="color: var(--brand-color)">${element.ordered}</td>
       <td><span>${element.likes}</span></td>
       <td>
-        <button class="edit-btn" onclick="showEditForm(${element.id})">Edit</button>
-        <button class="delete-btn" onclick="deleteProduct(${element.id})">Delete</button>
+        <button class="edit-btn" onclick="showEditForm('${element.id}')">Edit</button>
+        <button class="delete-btn" onclick="deleteProduct('${element.id}')">Delete</button>
 
       </td>
     </tr>
@@ -196,28 +185,15 @@ const showProductList = (data: Product[]) => {
 };
 
 /**
- * Function to call API and show products
- */
-async function APIGetProducts() {
-  try {
-    const res = await fetch("http://localhost:3000/products");
-    const data = await res.json();
-    products = data; // Store fetched products for pagination
-    showProductList(data);
-  } catch (error) {
-    console.log("Error fetching products:", error);
-  }
-}
-APIGetProducts();
-
-/**
  * Function to redirect to add-product page and show editing product's details
  * @param id
  */
 const showEditForm = async (id: string) => {
-  const product: Product = products[parseInt(id)];
-  if (!product) alert("Product not found");
-
+  const product = products.find((e: Product) => e.id === id);
+  if (!product) {
+    alert("Product not found: " + id);
+    return; // Prevent further execution if product is not found
+  }
   // Set product ID on form container
   const formContainer = document.getElementById("editFormContainer");
   if (formContainer) {
@@ -294,6 +270,27 @@ const saveEdit = async (id: string) => {
       document.getElementById("editCategory") as HTMLSelectElement
     ).value;
 
+    // Validate inputs
+    if (!name.trim()) {
+      alert("Product name is required");
+      return false;
+    } else if (!description.trim()) {
+      alert("Description is required");
+      return false;
+    } else if (!image.trim()) {
+      alert("Image URL is required");
+      return false;
+    } else if (!category.trim() || category.trim() == "0") {
+      alert("Category is required");
+      return false;
+    } else if (isNaN(stock) || stock <= 0) {
+      alert("Quantity must be a positive number");
+      return false;
+    } else if (isNaN(price) || price <= 0) {
+      alert("Price must be a positive number");
+      return false;
+    }
+
     // Get selected tags
     const tags: string[] = [];
     if ((document.getElementById("editNewItem") as HTMLInputElement).checked) {
@@ -311,15 +308,6 @@ const saveEdit = async (id: string) => {
     }
 
     if (!id) throw new Error("Product ID not found");
-
-    // // Get category'name display
-    // const cateRes =  await fetch("http://localhost:3000/categories") ;
-    // const cateData = await cateRes.json();
-    // const cateFind: Category = cateData.find((c: Category) => c.id == (parseInt(category) - 1).toString());
-    // if (!cateFind) {
-    //   console.log("Can't find category with ID " + category);
-    // }
-    // let cateName = cateFind.name;
 
     // Create updated product object
     const updatedProduct: Product = {
@@ -376,7 +364,7 @@ const cancelEdit = () => {
   if (formContainer) {
     formContainer.style.display = "none";
     (document.getElementById("products-main") as HTMLElement).style.display =
-      "none";
+      "block";
   }
 };
 
@@ -394,7 +382,7 @@ const deleteProduct = async (id: string) => {
     });
 
     alert("Sản phẩm đã bị xóa!");
-    window.location.href = "/admin/views/add-product.html";
+    window.location.href = "../views/add-product.html";
   } catch (error) {
     console.error("Lỗi khi xóa sản phẩm:", error);
   }
@@ -417,66 +405,56 @@ const addProduct = async () => {
     const stockInput = document.getElementById("stock") as HTMLInputElement;
     const priceInput = document.getElementById("price") as HTMLInputElement;
 
-    // Clear previous error messages
-    document.querySelectorAll(".error-message").forEach((el) => el.remove());
-
     // Validate inputs
-    if (!nameInput.value.trim()) {
+    const name = nameInput.value.trim();
+    const description = descInput.value.trim();
+    const image = imageInput.value.trim();
+    const category = categoryInput.value.trim();
+    const stock = parseInt(stockInput.value);
+    const price = parseFloat(priceInput.value);
+
+    if (!name) {
       alert("Product name is required");
-      return;
-    }
-    if (!descInput.value.trim()) {
+      return false;
+    } else if (!description) {
       alert("Description is required");
-      return;
-    }
-    if (!imageInput.value.trim()) {
+      return false;
+    } else if (!image) {
       alert("Image URL is required");
-      return;
-    }
-    if (!categoryInput.value.trim()) {
+      return false;
+    } else if (!category || category == "0") {
       alert("Category is required");
-      return;
-    }
-    if (
-      !stockInput.value.trim() ||
-      isNaN(parseInt(stockInput.value)) ||
-      parseInt(stockInput.value) <= 0
-    ) {
+      return false;
+    } else if (isNaN(stock) || stock <= 0) {
       alert("Quantity must be a positive number");
-      return;
-    }
-    if (
-      !priceInput.value.trim() ||
-      isNaN(parseFloat(priceInput.value)) ||
-      parseFloat(priceInput.value) <= 0
-    ) {
+      return false;
+    } else if (isNaN(price) || price <= 0) {
       alert("Price must be a positive number");
-      return;
+      return false;
     }
 
-    //Create new id
+    // Create new id
     const lastProductId = parseInt(products[products.length - 1]?.id ?? "0");
     const newId = (lastProductId + 1).toString();
     // Create product object
     const newProduct: Product = {
-      id: newId.toString(),
-      name: nameInput.value.trim(),
-      description: descInput.value.trim(),
+      id: newId,
+      name: name,
+      description: description,
       images: [
         {
-          url: imageInput.value.trim(),
-          alt: descInput.value.trim() || nameInput.value.trim(),
+          url: image,
+          alt: description,
         },
       ],
-      category: categoryInput.value.trim(),
-      stock: parseInt(stockInput.value),
-      price: parseFloat(priceInput.value),
+      category: category,
+      stock: stock,
+      price: price,
       tags: getSelectedTags(),
       likes: 0,
       ordered: 0,
       created_at: new Date().toISOString(),
     };
-
     // Send request
     const res = await fetch("http://localhost:3000/products", {
       method: "POST",
@@ -489,11 +467,16 @@ const addProduct = async () => {
     if (!res.ok) {
       const errorData = await res.json();
       throw new Error(errorData.message || "Failed to add product");
+      // console.log(res);
+    }
+    if (res.ok) {
+      window.location.href = "../views/products.html";
+      alert("Product added successfully!");
+      console.log(res);
+      return true;
     }
 
     // Show success message and redirect
-    alert("Product added successfully!");
-    window.location.href = "products.html";
   } catch (error) {
     console.error("Error adding product:", error);
     alert(

@@ -1,11 +1,16 @@
 // import { parseDate } from "../index";
 interface Product {
-  id: number;
+  id?: string;
+
   name: string;
   category: string;
   price: number;
-  images: { url: any }[];
+  images: { url: string; alt: string }[];
+
+  likes: number;
+  ordered: number;
 }
+
 /**
  * Biến đổi kiểu date "dd/mm/yyyy" thành kiểu Date Object
  */
@@ -56,7 +61,10 @@ async function threeColsFilter() {
         <div class="bst-prod-content">
           <a href="">${element.name}</a>
            <a class="category-link" href="">${element.category}</a>
-           <p>${element.price}đ</p>
+           <div style="display:flex; align-items: center; justify-content: space-between;">
+            <p>${element.price}đ</p>
+            <button class="cartBtn" data="${element.id}"><i class="bi bi-cart-fill"></i></button>
+           </div>
          </div>
         </div>
       </div>`;
@@ -64,9 +72,7 @@ async function threeColsFilter() {
     });
     // Bánh Trứng
     let banh_trung: Product[] = sortedData.filter((item: Product) => {
-      if (
-        item.category == "Bánh trứng gà non HongKong"
-      ) {
+      if (item.category == "Bánh Trứng Gà Non HongKong") {
         return item;
       }
     });
@@ -81,7 +87,10 @@ async function threeColsFilter() {
         <div class="bst-prod-content">
           <a href="">${element.name}</a>
            <a class="category-link" href="">${element.category}</a>
-           <p>${element.price}đ</p>
+                      <div style="display:flex; align-items: center; justify-content: space-between;">
+            <p>${element.price}đ</p>
+            <button class="cartBtn" data="${element.id}"><i class="bi bi-cart-fill"></i></button>
+           </div>
          </div>
         </div>
       </div>`;
@@ -89,9 +98,7 @@ async function threeColsFilter() {
     });
     // Trà thơm
     let tra_thom: Product[] = sortedData.filter((item: Product) => {
-      if (
-        item.category == "Say Cheese THANH MÁT"
-      ) {
+      if (item.category == "Say Cheese THANH MÁT") {
         return item;
       }
     });
@@ -106,104 +113,84 @@ async function threeColsFilter() {
         <div class="bst-prod-content">
           <a href="">${element.name}</a>
            <a class="category-link" href="">${element.category}</a>
-           <p>${element.price}đ</p>
+           <div style="display:flex; align-items: center; justify-content: space-between;">
+            <p>${element.price}đ</p>
+            <button class="cartBtn" data="${element.id}"><i class="bi bi-cart-fill"></i></button>
+           </div>
          </div>
         </div>
       </div>`;
       tra_thom_container.innerHTML += prod;
     });
     console.log(sua_beo);
-
-    // let banh_trung: Product[] = [];
-    // let tra_thom: Product[] = [];
-    // sortedData.map((item: Product) => {
-    //   if (
-    //     item.category === "Say Cheese THƠM BÉO" ||
-    //     item.category === "Say Cheese ĐẬM VỊ"
-    //   ) {
-    //     sua_beo.push(item);
-    //   } else if (item.category === "Bánh trứng gà non HongKong") {
-    //     banh_trung.push(item);
-
-    //     console.log("top bánh trứng:" + top);
-    //   } else if (item.category === "Say Cheese THANH MÁT") {
-    //     tra_thom.push(item);
-
-    //     console.log("top trà thơm:" + top);
-    //   }
-    // });
-    // sua_beo.forEach((element: Product) => {
-    //   const prod = `<div class="best-prod">
-    //   <div class="product">
-    //     <div class="overflow-hidden">
-    //       <img src="${element.images[0].url}" alt="" />
-    //       <img class="tag" src="../images/hot.png" alt="" />
-    //     </div>
-    //     <div class="bst-prod-content">
-    //       <a href="">${element.name}</a>
-    //        <a class="category-link" href="">${element.category}</a>
-    //        <p>${element.price}đ</p>
-    //      </div>
-    //     </div>
-    //   </div>`;
-    //   sua_beo_container.innerHTML += prod;
-    // });
-    // banh_trung.forEach((element: Product) => {
-    //   const prod = `<div class="best-prod">
-    //       <div class="product">
-    //         <div class="overflow-hidden">
-    //           <img src="${element.images[0].url}" alt="" />
-    //           <img class="tag" src="../images/hot.png" alt="" />
-    //         </div>
-    //         <div class="bst-prod-content">
-    //           <a href="">${element.name}</a>
-    //            <a class="category-link" href="">${element.category}</a>
-    //            <p>${element.price}đ</p>
-    //          </div>
-    //         </div>
-    //       </div>`;
-    //   banh_trung_container.innerHTML += prod;
-    // });
-    // tra_thom.forEach((element: Product) => {
-    //   const prod = `<div class="best-prod">
-    //       <div class="product">
-    //         <div class="overflow-hidden">
-    //           <img src="${element.images[0].url}" alt="" />
-    //           <img class="tag" src="../images/hot.png" alt="" />
-    //         </div>
-    //         <div class="bst-prod-content">
-    //           <a href="">${element.name}</a>
-    //            <a class="category-link" href="">${element.category}</a>
-    //            <p>${element.price}đ</p>
-    //          </div>
-    //         </div>
-    //       </div>`;
-    //   tra_thom_container.innerHTML += prod;
-    // });
-
-    // const top = filteredProds.slice(-3);
-    // top.forEach(
-    //   (element: Product) => {
-    //     const prod = `<div class="best-prod">
-    //       <div class="product">
-    //         <div class="overflow-hidden">
-    //           <img src="${element.images[0].url}" alt="" />
-    //           <img class="tag" src="../images/hot.png" alt="" />
-    //         </div>
-    //         <div class="bst-prod-content">
-    //           <a href="">${element.name}</a>
-    //            <a class="category-link" href="">${element.category}</a>
-    //            <p>${element.price}đ</p>
-    //          </div>
-    //         </div>
-    //       </div>`;
-    //     container.innerHTML += prod;
-    //   }
-    // );
-
-    // console.log(top);
   } catch (error) {
     console.log("Error fetching categories:", error);
   }
 }
+
+async function fetchMostlikesProducts() {
+  try {
+    const res = await fetch("http://localhost:3000/products");
+    const data = await res.json();
+    const mostlikesContainer = document.getElementById(
+      "alllist"
+    ) as HTMLElement;
+
+    const sortedData = data.sort((a: Product, b: Product) => b.likes - a.likes);
+    console.log(sortedData);
+
+    sortedData.slice(0, 5).forEach((element: Product) => {
+      const prod = `<div class="product">
+          <div class="overflow-hidden">
+            <img src="${element.images[0].url}" alt="" />
+          </div>
+          <a href="#">${element.name}</a>
+          <a class="category-link" href="">${element.category}</a>
+          <p>${element.price}đ</p>
+          <button class="cartBtn" data="${element.id}">Thêm vào giỏ hàng</button>
+        </div>`;
+      mostlikesContainer.innerHTML += prod;
+    });
+  } catch (error) {
+    console.log("Error fetching most likes products:", error);
+  }
+}
+
+async function fetchBestSellingProducts() {
+  try {
+    const res = await fetch("http://localhost:3000/products");
+    const data = await res.json();
+    const bestSellersContainer = document.querySelector(
+      ".best-prod-list"
+    ) as HTMLElement;
+
+    const sortedData = data.sort(
+      (a: Product, b: Product) => b.ordered - a.ordered
+    );
+    sortedData.slice(0, 6).forEach((element: Product) => {
+      const prod = `<div class="best-prod">
+        <div class="product">
+          <div class="overflow-hidden">
+            <img src="${element.images[0].url}" alt="" />
+            <img class="tag" src="../images/hot.png" alt="" />
+          </div>
+          <div class="bst-prod-content">
+            <a href="">${element.name}</a>
+            <a class="category-link" href="">${element.category}</a>
+           <div style="display:flex; align-items: center; justify-content: space-between;">
+            <p>${element.price}đ</p>
+            <button class="cartBtn" data="${element.id}"><i class="bi bi-cart-fill"></i></button>
+           </div>
+          </div>
+        </div>
+      </div>`;
+      bestSellersContainer.innerHTML += prod;
+    });
+  } catch (error) {
+    console.log("Error fetching best selling products:", error);
+  }
+}
+
 threeColsFilter();
+fetchMostlikesProducts();
+fetchBestSellingProducts();
