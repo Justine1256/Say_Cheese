@@ -27,7 +27,6 @@ interface Order {
 
 let statusData: Status[] = [];
 
-
 const getCart = (): CartItem[] => {
   return JSON.parse(localStorage.getItem("cart") || "[]");
 };
@@ -38,7 +37,7 @@ const showCart = (cart: CartItem[]): void => {
 
 const loadOrder = (data: Order[]) => {
   console.log(data);
-  
+
   const showOrders = document.getElementById("alllist") as HTMLElement;
   if (!showOrders) {
     console.log("Can't find #showOrders");
@@ -55,19 +54,27 @@ const loadOrder = (data: Order[]) => {
             <td><a href="">${order.customer.name}</a></td>
             <td>Order's detail</td>
             <td>${new Date(order.date).toLocaleDateString()}</td>
-            <td>${order.items.reduce((total, item) => total + item.price * item.quantity, 0)}</td>
+            <td>${order.items.reduce(
+              (total, item) => total + item.price * item.quantity,
+              0
+            )}</td>
             <td>
               <select class="status-dropdown" style="border: none">
-                ${statusData.map(status => 
-                  `<option value="${status.id}" ${order.status == status.id ? "selected" : ""}>
+                ${statusData
+                  .map(
+                    (status) =>
+                      `<option value="${status.id}" ${
+                        order.status == status.id ? "selected" : ""
+                      }>
                     ${status.name}
                   </option>`
-                ).join('')}
+                  )
+                  .join("")}
               </select>
 
             </td>
             <td>
-              <a>Edit</a> / <button class="update-status edit-btn">Update</button>
+              <button class="update-status edit-btn">Update</button>
             </td>
           </tr>`;
       showOrders.innerHTML += orderHtml;
@@ -104,7 +111,8 @@ const setupStatusUpdateHandlers = () => {
       }
 
       const orderIdElement = row.querySelector("td:first-child");
-      const statusElement = row.querySelector<HTMLSelectElement>(".status-dropdown");
+      const statusElement =
+        row.querySelector<HTMLSelectElement>(".status-dropdown");
 
       if (!orderIdElement || !statusElement) {
         console.error("Could not find required elements");
@@ -114,44 +122,37 @@ const setupStatusUpdateHandlers = () => {
       const orderId = orderIdElement.textContent || "";
       const status = parseInt(statusElement.value);
 
-
-      updateOrderStatus(orderId, status)
-        .then(() => {
-          alert("Status updated successfully");
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-          alert("Failed to update status");
-        });
+      updateOrderStatus(orderId, status);
     });
   });
 };
 
 const getStatusName = (statusId: number): string => {
-  const status = statusData.find(s => s.id === statusId);
+  const status = statusData.find((s) => s.id === statusId);
   return status ? status.name : "Unknown";
 };
 
-const validateStatusTransition = (currentStatus: number, newStatus: number): boolean => {
+const validateStatusTransition = (
+  currentStatus: number,
+  newStatus: number
+): boolean => {
   return newStatus >= currentStatus;
 };
 
-
-
 const updateOrderStatus = async (orderId: string, newStatus: number) => {
-
   try {
     // Get current order status
-    const orderResponse = await fetch(`http://localhost:3000/orders/${orderId}`);
-    if (!orderResponse.ok) {
-      throw new Error("Failed to fetch order details");
-    }
+    const orderResponse = await fetch(
+      `http://localhost:3000/orders/${orderId}`
+    );
     const order: Order = await orderResponse.json();
-    
+
     // Validate status transition
     if (!validateStatusTransition(order.status, newStatus)) {
-
-      throw new Error(`Cannot move status backward from ${order.status} to ${newStatus}`);
+      alert (`Cannot move status backward from ${order.status} to ${newStatus}`)
+      throw new Error(
+        `Cannot move status backward from ${order.status} to ${newStatus}`
+      );
     }
 
     // Update status
@@ -166,9 +167,10 @@ const updateOrderStatus = async (orderId: string, newStatus: number) => {
     }
 
     console.log(`Order ${orderId} status updated to ${newStatus}`);
-    getOrder();
+    alert("Status updated successfully");
+
+    await getOrder();
   } catch (error) {
     console.error("Error updating order status:", error);
-    alert(error instanceof Error ? error.message : "Failed to update order status");
   }
 };

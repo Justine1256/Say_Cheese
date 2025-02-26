@@ -18,29 +18,6 @@ interface Product {
  * Hiển thị danh sách sản phẩm
  */
 const alllist = document.querySelector("#alllist") as HTMLElement;
-const showProductList = (data: any[]) => {
-  if (!alllist) {
-    console.log("Element '#alllist' not found");
-    return;
-  }
-  data.forEach((element) => {
-    const prod = `
-      <div class="product">
-        <a href="product-details.html?id=${element.id}">
-          <div class="overflow-hidden">
-            <img src="${element.images[0].url}" alt="" />
-            <img class="tag" src="../images/hot.png" alt="" />
-          </div>
-          <a href="#">${element.name}</a>
-          <a class="category-link" href="">${element.category}</a>
-          <p>${element.price}đ</p>
-          <button class="cartBtn" data="${element.id}">Thêm vào giỏ hàng</button>
-        </a>
-      </div>
-          `;
-    alllist.innerHTML += prod;
-  });
-};
 
 /**
  * Hiển thị danh sách danh mục ở select
@@ -122,7 +99,7 @@ const showDetails = (data: Product): void => {
       </div>
       <div class="btn">
         <button>Mua ngay</button>
-        <button>Thêm vào giỏ hàng</button>
+        <button class="cartBtn" onclick="addProductToCart(${data.id})">Thêm vào giỏ hàng</button>
       </div>
       <div class="prod-social">
         <a href="#" id="facebook">
@@ -166,7 +143,6 @@ async function getProductsDetails(): Promise<void> {
       throw new Error(`HTTP error! status: ${res.status}`);
     }
     const data: Product = await res.json();
-    console.log(data);
     showDetails(data);
   } catch (error) {
     console.log("Error fetching product details:", error);
@@ -174,3 +150,75 @@ async function getProductsDetails(): Promise<void> {
 }
 
 getProductsDetails();
+
+/**
+ * Event listener for add to cart button
+ */
+const cartBtn = document.querySelectorAll(".cartBtn");
+cartBtn.forEach((btn) => {
+  btn.addEventListener("click", (event) => {
+    console.log("GOT IT");
+    event.preventDefault();
+    const dataValue = btn.getAttribute("data");
+    if (dataValue !== null) {
+      addProductToCart(dataValue);
+    } else {
+      console.error("Data attribute 'data' is missing on the button.");
+    }
+  });
+});
+
+const retrieveCart = (): CartItem[] => {
+  return JSON.parse(localStorage.getItem("cart") || "[]");
+};
+
+const storeCart = (cart: CartItem[]): void => {
+  localStorage.setItem("cart", JSON.stringify(cart));
+};
+
+/**
+ * Get product's id and add it to the cart
+ * @param id : product id
+ */
+const addProductToCart = async (id: string) => {
+  try {
+    let cart: CartItem[] = retrieveCart();
+    const res = await fetch("http://localhost:3000/products");
+    const productlist: Product[] = await res.json();
+    var existingItem = cart.filter((item) => item.id == id);
+    if (existingItem.length == 1) {
+      cart.map((item) => {
+        if (item.id == id) {
+          item.quantity++;
+        }
+      });
+    } else {
+      const product = productlist.filter((item) => item.id == id) as Product[];
+      const cartProduct: CartItem = {
+        id: product[0]?.id || "",
+        name: product[0]?.name || "",
+        price: product[0]?.price || 0,
+        description: product[0]?.description || "",
+        category: product[0]?.category || "",
+        images: product[0]?.images || [],
+        quantity: 1,
+        stock: product[0]?.stock || 0,
+        likes: product[0]?.likes || 0,
+        tags: product[0]?.tags || [],
+        created_at: product[0]?.created_at || "",
+        ordered: product[0]?.ordered || 0,
+      };
+      if (cartProduct) {
+        cart.push(cartProduct);
+      } else {
+        throw new Error("Product not found");
+      }
+    }
+    storeCart(cart);
+    alert("Thêm vào giỏ hàng thành công!");
+    // renderCart(cart);
+  } catch (error) {
+    alert("Lỗi khi thêm vào giỏ hàng:");
+    console.error(error);
+  }
+};

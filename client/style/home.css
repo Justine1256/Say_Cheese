@@ -459,9 +459,9 @@ nav ul ul a {
     padding: 5px 10px;
     width: min-content;
     border: none;
-  & i {
-    font-size: 20px;
-  }
+    & i {
+      font-size: 20px;
+    }
   }
 }
 .best-prod > img {
@@ -1005,80 +1005,73 @@ a {
 /* --------------------------------------------------CART------------------------------------------------------- */
 /* ADDED PRODUCT LIST */
 table {
-  max-width: 1170px;
+  max-width: 90%;
   margin: 70px auto;
   border-collapse: collapse;
   border: 1px solid #ddd;
 }
+thead {
+  background-color: var(--background-color);
+  color: var(--primary-color);
+}
+tbody {
+  padding: 10px;
+}
 th {
-  border-bottom: 3px solid var(--secondary-color);
-  border-right: 0.8px solid #ddd;
-  font-size: 16px;
-  font-weight: 500;
   text-transform: capitalize;
   padding: 10px !important;
-  text-align: center;
+}
+tr {
+  border-bottom: 1px solid #ddd;
 }
 td {
-  border-right: 0.8px solid #ddd;
+  min-width: 120px;
+  max-height: 100px;
+  padding: 10px;
 }
 .product-remove {
-  width: 100px;
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 175.2px;
-  & button {
-    background-color: #00000000;
-    &:hover {
-      & img {
-        opacity: 100%;
-      }
-    }
+  min-width: 50px !important;
+  vertical-align: middle; /* Aligns the content vertically */
+}
+
+.delete-cart {
+  border: none;
+  color: #ddd;
+  background-color: transparent;
+  & :hover {
+    color: var(--brand-color);
   }
+}
+
+.cart-item-img {
   & img {
-    width: 15px;
-    height: 15px;
-    opacity: 60%;
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
   }
 }
-.product-thumb {
-  width: 170px;
-  padding: 20px;
-}
-.product-thumb img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-}
+
 .product-name {
   width: 230px;
   text-align: center;
-  padding: 10px;
-  font-size: 14px;
+  /* font-size: 14px; */
 }
 .product-price {
-  width: 150px;
   color: #222222;
   font-size: 16px;
   font-weight: 500;
   text-align: center;
 }
 .product-quantity {
-  width: 218px;
-  padding: 10px;
   text-align: center;
 }
 .product-quantity input {
-  width: 60px;
-  height: 40px;
-  padding: 0 5px 0 10px;
+  padding: 5px 10px;
+  width: 50px;
   background: none;
   border: 1px solid #ddd;
 }
 .product-total {
-  width: 150px;
   text-align: center;
 }
 /* COUPON-CẢT TOTAL AREA */

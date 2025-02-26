@@ -172,7 +172,7 @@ const showShopList = (data) => {
           <a href="#">${element.name}</a>
           <a class="category-link" href="">${element.category}</a>
           <p>${element.price}đ</p>
-          <button class="cartBtn" data="${element.id}">Thêm vào giỏ hàng</button>
+          <button class="cartBtn" onclick="addProductToCart(${element.id})">Thêm vào giỏ hàng</button>
         </a>
       </div>`)
         .join("");

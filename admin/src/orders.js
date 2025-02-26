@@ -37,14 +37,16 @@ const loadOrder = (data) => {
             <td>${order.items.reduce((total, item) => total + item.price * item.quantity, 0)}</td>
             <td>
               <select class="status-dropdown" style="border: none">
-                ${statusData.map(status => `<option value="${status.id}" ${order.status == status.id ? "selected" : ""}>
+                ${statusData
+                .map((status) => `<option value="${status.id}" ${order.status == status.id ? "selected" : ""}>
                     ${status.name}
-                  </option>`).join('')}
+                  </option>`)
+                .join("")}
               </select>
 
             </td>
             <td>
-              <a>Edit</a> / <button class="update-status edit-btn">Update</button>
+              <button class="update-status edit-btn">Update</button>
             </td>
           </tr>`;
             showOrders.innerHTML += orderHtml;
@@ -82,19 +84,12 @@ const setupStatusUpdateHandlers = () => {
             }
             const orderId = orderIdElement.textContent || "";
             const status = parseInt(statusElement.value);
-            updateOrderStatus(orderId, status)
-                .then(() => {
-                alert("Status updated successfully");
-            })
-                .catch((error) => {
-                console.error("Error:", error);
-                alert("Failed to update status");
-            });
+            updateOrderStatus(orderId, status);
         });
     });
 };
 const getStatusName = (statusId) => {
-    const status = statusData.find(s => s.id === statusId);
+    const status = statusData.find((s) => s.id === statusId);
     return status ? status.name : "Unknown";
 };
 const validateStatusTransition = (currentStatus, newStatus) => {
@@ -104,12 +99,10 @@ const updateOrderStatus = (orderId, newStatus) => __awaiter(void 0, void 0, void
     try {
         // Get current order status
         const orderResponse = yield fetch(`http://localhost:3000/orders/${orderId}`);
-        if (!orderResponse.ok) {
-            throw new Error("Failed to fetch order details");
-        }
         const order = yield orderResponse.json();
         // Validate status transition
         if (!validateStatusTransition(order.status, newStatus)) {
+            alert(`Cannot move status backward from ${order.status} to ${newStatus}`);
             throw new Error(`Cannot move status backward from ${order.status} to ${newStatus}`);
         }
         // Update status
@@ -122,10 +115,10 @@ const updateOrderStatus = (orderId, newStatus) => __awaiter(void 0, void 0, void
             throw new Error("Failed to update order status");
         }
         console.log(`Order ${orderId} status updated to ${newStatus}`);
-        getOrder();
+        alert("Status updated successfully");
+        yield getOrder();
     }
     catch (error) {
         console.error("Error updating order status:", error);
-        alert(error instanceof Error ? error.message : "Failed to update order status");
     }
 });

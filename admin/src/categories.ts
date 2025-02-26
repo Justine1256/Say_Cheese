@@ -88,8 +88,9 @@ async function postCategory(): Promise<void> {
   }
 
   // Validation: Check if the name contains only letters
-  const validNamePattern = /^[A-Za-z]+$/; // Only letters allowed
-  if (!validNamePattern.test(newCateName)) {
+const validNamePattern = /^[A-Za-zÀ-ÿ]+$/; // Allow letters including Vietnamese characters
+
+  if (!validNamePattern.test(newCateName.trim())) {
     console.error("Invalid category name");
     alert(
       "Category name must contain only letters and cannot include numbers, spaces, or special symbols."

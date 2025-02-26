@@ -66,24 +66,6 @@ const getSelectedTags = () => {
     });
     return selectedValues;
 };
-/**
- * Function to call API and show products
- */
-function APIGetProducts() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const res = yield fetch("http://localhost:3000/products");
-            const data = yield res.json();
-            products = data; // Store fetched products for pagination
-            showProductList(data);
-            // console.log(products);
-        }
-        catch (error) {
-            console.log("Error fetching products:", error);
-        }
-    });
-}
-APIGetProducts();
 function updatePaginationProd(data) {
     var pagination = document.getElementById("product-pagination");
     if (pagination) {
@@ -97,7 +79,7 @@ function updatePaginationProd(data) {
             pageButtons[1].classList.remove("disabled");
         }
         for (var i = 2; i < pageButtons.length - 1; i++) {
-            if (i === currentPage) {
+            if (i == currentPage) {
                 pageButtons[i].classList.add("active");
             }
             else {
@@ -117,33 +99,9 @@ function updatePaginationProd(data) {
     }
 }
 const showProductList = (data) => {
-    if (!alllist)
-        return;
     var startIndex = (currentPage - 1) * productsPerPage;
     var endIndex = startIndex + productsPerPage;
     var pageProducts = data.slice(startIndex, endIndex);
-    alllist.innerHTML = pageProducts
-        .map((element) => `
-    <tr>
-      <td>${element.id}</td>
-      <td class="display-flex row-thumbnail">
-        <img src="${element.images[0].url}" alt="" style="width: 50px" />
-        <div class="row-thumbnail">
-          <a>${element.name}</a>
-          <span>${element.category}</span>
-        </div>
-      </td>
-      <td style="color: var(--brand-color)">${element.stock}</td>
-      <td>${element.price}</td>
-      <td style="color: var(--brand-color)">${element.ordered}</td>
-      <td><span>${element.likes}</span></td>
-      <td>
-        <button class="edit-btn" onclick="showEditForm('${element.id}')">Edit</button>
-        <button class="delete-btn" onclick="deleteProduct('${element.id}')">Delete</button>
-      </td>
-    </tr>
-  `)
-        .join("");
     const productCountElement = document.getElementById("product-count");
     if (productCountElement) {
         productCountElement.textContent = `Showing ${startIndex + 1} to ${endIndex} of ${data.length} results`;
@@ -182,6 +140,24 @@ const showProductList = (data) => {
     }
     updatePaginationProd(data);
 };
+/**
+ * Function to call API and show products
+ */
+function APIGetProducts() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const res = yield fetch("http://localhost:3000/products");
+            const data = yield res.json();
+            products = data; // Store fetched products for pagination
+            showProductList(data);
+            // console.log(products);
+        }
+        catch (error) {
+            console.log("Error fetching products:", error);
+        }
+    });
+}
+APIGetProducts();
 /**
  * Function to redirect to add-product page and show editing product's details
  * @param id

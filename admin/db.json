@@ -1102,26 +1102,6 @@
       "likes": 0,
       "ordered": 0,
       "created_at": "2025-02-24T10:56:15.466Z"
-    },
-    {
-      "id": "57",
-      "name": "Bánh trứng matcha",
-      "description": "sách vừa thêm vào",
-      "images": [
-        {
-          "url": "https://onekafe.vn/wp-content/uploads/2013/08/10-28.jpg",
-          "alt": "sách vừa thêm vào"
-        }
-      ],
-      "category": "Say Cheese CÓ GU",
-      "stock": 1,
-      "price": 1,
-      "tags": [
-        "Món mới"
-      ],
-      "likes": 0,
-      "ordered": 0,
-      "created_at": "2025-02-24T10:57:22.843Z"
     }
   ],
   "categories": [
@@ -1197,7 +1177,7 @@
     },
     {
       "id": "2",
-      "status": 3,
+      "status": 2,
       "date": "2025-02-21T14:18:14.831Z",
       "customer": {
         "name": "Cat Tuong",
@@ -1227,7 +1207,7 @@
     },
     {
       "id": "3",
-      "status": 3,
+      "status": 0,
       "date": "2025-02-21T14:18:14.831Z",
       "customer": {
         "name": "Thien An",

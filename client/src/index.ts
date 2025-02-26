@@ -65,7 +65,7 @@ async function threeColsFilter() {
            <a class="category-link" href="">${element.category}</a>
            <div style="display:flex; align-items: center; justify-content: space-between;">
             <p>${element.price}đ</p>
-            <button class="cartBtn" data="${element.id}"><i class="bi bi-cart-fill"></i></button>
+            <button class="cartBtn" onclick="addProductToCart(${element.id})"><i class="bi bi-cart-fill"></i></button>
            </div>
          </div>
         </div>
@@ -95,7 +95,7 @@ async function threeColsFilter() {
            <a class="category-link" href="">${element.category}</a>
                       <div style="display:flex; align-items: center; justify-content: space-between;">
             <p>${element.price}đ</p>
-            <button class="cartBtn" data="${element.id}"><i class="bi bi-cart-fill"></i></button>
+            <button class="cartBtn" onclick="addProductToCart(${element.id})"><i class="bi bi-cart-fill"></i></button>
            </div>
          </div>
         </div>
@@ -125,7 +125,7 @@ async function threeColsFilter() {
             <a class="category-link" href="">${element.category}</a>
             <div style="display:flex; align-items: center; justify-content: space-between;">
             <p>${element.price}đ</p>
-            <button class="cartBtn" data="${element.id}"><i class="bi bi-cart-fill"></i></button>
+            <button class="cartBtn" onclick="addProductToCart(${element.id})"><i class="bi bi-cart-fill"></i></button>
           </div>
          </div>
       </div>
@@ -133,7 +133,6 @@ async function threeColsFilter() {
         </a>`;
       tra_thom_container.innerHTML += prod;
     });
-    console.log(sua_beo);
   } catch (error) {
     console.log("Error fetching categories:", error);
   }
@@ -151,7 +150,6 @@ async function fetchMostlikesProducts() {
     ) as HTMLElement;
 
     const sortedData = data.sort((a: Product, b: Product) => b.likes - a.likes);
-    console.log(sortedData);
 
     sortedData.slice(0, 5).forEach((element: Product) => {
       const prod = `
@@ -163,7 +161,7 @@ async function fetchMostlikesProducts() {
           <a href="product-details.html?id=${element.id}">${element.name}</a>
           <a class="category-link" href="">${element.category}</a>
           <p>${element.price}đ</p>
-          <button class="cartBtn" data="${element.id}">Thêm vào giỏ hàng</button>
+          <button class="cartBtn" onclick="addProductToCart(${element.id})">Thêm vào giỏ hàng</button>
         </div>
       </a>
 `;
@@ -201,7 +199,7 @@ async function fetchBestSellingProducts() {
             <a class="category-link" href="">${element.category}</a>
            <div style="display:flex; align-items: center; justify-content: space-between;">
             <p>${element.price}đ</p>
-            <button class="cartBtn" data="${element.id}"><i class="bi bi-cart-fill"></i></button>
+            <button class="cartBtn" onclick="addProductToCart(${element.id})"><i class="bi bi-cart-fill"></i></button>
            </div>
           </div>
           </a>
