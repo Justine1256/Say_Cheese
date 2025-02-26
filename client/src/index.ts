@@ -217,3 +217,5 @@ async function fetchBestSellingProducts() {
 threeColsFilter();
 fetchMostlikesProducts();
 fetchBestSellingProducts();
+
+

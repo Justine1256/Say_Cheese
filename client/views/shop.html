@@ -44,10 +44,6 @@
           <span id="cart-count"></span>
         </a>
       </div>
-      <!-- <div class="sign-in-options">
-        <a href="login.html">LOGIN</a>/
-        <a href="register.html">REGISTER</a>
-      </div> -->
     </header>
 
     <!-- NAVBAR -->
@@ -83,128 +79,39 @@
       <div class="left-container">
         <!-- SHOP TOOLBAR -->
         <div class="shop-toolbar">
-          <select name="" id="">
-            <option value="">-- Lọc sản phẩm --</option>
-            <option value="">Phổ biến</option>
-            <option value="">Bán chạy</option>
-            <option value="">Mới nhất</option>
+          <select value="" id="filterList">
+            <option value="Tất cả" selected>Tất cả</option>
+            <option value="Bán chạy">Bán chạy</option>
+            <option value="Mới nhất">Mới nhất</option>
+            <option value="Đặc trưng">Đặc trưng</option>
           </select>
-          <select name="" id="">
-            <option value="">-- Giá --</option>
-            <option value="price-low">Giá thấp đến cao</option>
-            <option value="price-high">Giá cao đến thấp</option>
+          <select value="" id="sortList">
+            <option value="random" selected>-- Sắp xếp --</option>
+            <option value="price-high">Giá tăng dần</option>
+            <option value="price-low">Giá giảm dần</option>
+            <option value="name">Tên</option>
           </select>
         </div>
 
         <!-- PRODUCT LIST -->
         <div class="five-prod-list" id="shop-prod-list">
-          <div id="alllist" class="product-list">
-            <!-- <div class="product">
-              <div class="overflow-hidden">
-                <img src="IMG/milk-coffee.jpg" alt="" />
-              </div>
-              <a href="#">Sữa tươi cà phê</a>
-              <a class="category-link" href="">Say Cheese CÓ GU</a>
-              <p>25.000đ</p>
+          <div id="alllist" class="product-list"></div>
+          <div class="table-footer">
+            <span id="product-count"></span>
+            <div class="pagination" id="product-pagination">
+              <a href="#" id="begin-btn" class=""><i class="bi bi-chevron-double-left"></i></a>
+              <a href="#" id="previous-btn" class=""><i class="bi bi-chevron-left"></i></a>
+              <a href="#" id="next-btn" class=""><i class="bi bi-chevron-right"></i></a>
+              <a href="#" id="end-btn" class=""><i class="bi bi-chevron-double-right"></i></a>
             </div>
-            <div class="product">
-              <div class="overflow-hidden">
-                <img src="IMG/rice-milktea.jpg" alt="" />
-                <img class="tag" src="IMG/hot.png" alt="" />
-              </div>
-              <a href="#">Trà sữa gạo</a>
-              <a class="category-link" href="">Say Cheese ĐẬM VỊ</a>
-              <p>25.000đ</p>
-            </div>
-            <div class="product">
-              <div class="overflow-hidden">
-                <img src="IMG/taro-milk.jpg" alt="" />
-              </div>
-
-              <a href="#">Sữa tươi khoai môn</a>
-              <a class="category-link" href="">Say Cheese THƠM BÉO</a>
-              <p>25.000đ</p>
-            </div>
-            <div class="product">
-              <div class="overflow-hidden">
-                <img src="IMG/x2pmtm.jpg" alt="" />
-                <img class="tag" src="IMG/hot.png" alt="" />
-              </div>
-              <a href="#">NV trứng muối double phô mai</a>
-              <a class="category-link" href="">Bánh trứng gà non HongKong</a>
-              <p>40.000đ</p>
-            </div>
-            <div class="product">
-              <div class="overflow-hidden">
-                <img src="IMG/pmxxcb.jpg" alt="" />
-                <img class="tag" src="IMG/hot.png" alt="" />
-              </div>
-              <a href="product-details.html">NV phô mai xúc xích chà bông</a>
-              <a class="category-link" href="">Bánh trứng gà non HongKong</a>
-              <p>36.000đ</p>
-            </div>
-            <div class="product">
-              <div class="overflow-hidden">
-                <img src="IMG/milk-coffee.jpg" alt="" />
-              </div>
-              <a href="#">Sữa tươi cà phê</a>
-              <a class="category-link" href="">Say Cheese CÓ GU</a>
-              <p>25.000đ</p>
-            </div>
-            <div class="product">
-              <div class="overflow-hidden">
-                <img src="IMG/rice-milktea.jpg" alt="" />
-                <img class="tag" src="IMG/hot.png" alt="" />
-              </div>
-              <a href="#">Trà sữa gạo</a>
-              <a class="category-link" href="">Say Cheese ĐẬM VỊ</a>
-              <p>25.000đ</p>
-            </div>
-            <div class="product">
-              <div class="overflow-hidden">
-                <img src="IMG/taro-milk.jpg" alt="" />
-              </div>
-
-              <a href="#">Sữa tươi khoai môn</a>
-              <a class="category-link" href="">Say Cheese THƠM BÉO</a>
-              <p>25.000đ</p>
-            </div>
-            <div class="product">
-              <div class="overflow-hidden">
-                <img src="IMG/taro-milk.jpg" alt="" />
-              </div>
-
-              <a href="#">Sữa tươi khoai môn</a>
-              <a class="category-link" href="">Say Cheese THƠM BÉO</a>
-              <p>25.000đ</p>
-            </div> -->
-          </div>
-        </div>
-        <div class="table-footer">
-          <span id="product-count"></span>
-          <div class="pagination" id="product-pagination">
-            <a href="#" id="begin-btn" class="disabled"
-              ><i class="bi bi-chevron-double-left"></i
-            ></a>
-            <a href="#" id="previous-btn" class="disabled"
-              ><i class="bi bi-chevron-left"></i
-            ></a>
-            <a href="#" id="next-btn"><i class="bi bi-chevron-right"></i></a>
-            <a href="#" id="end-btn"
-              ><i class="bi bi-chevron-double-right"></i
-            ></a>
           </div>
         </div>
       </div>
       <div class="right-container">
         <div class="sidebar-prod">
           <h3>Danh mục</h3>
-          <ul class="menu-cate">
-            <li><a href="#">Bánh trứng gà non HongKong</a></li>
-            <li><a href="#">Say Cheese ĐẬM VỊ</a></li>
-            <li><a href="#">Say Cheese THƠM BÉO</a></li>
-            <li><a href="#">Say Cheese CÓ GU</a></li>
-            <li><a href="#">Ăn bánh uống trà</a></li>
+          <ul id="menu-cate">
+            <li><a href="shop.html">Tất cả danh mục</a></li>
           </ul>
         </div>
       </div>
@@ -225,7 +132,6 @@
       <img class="footer-logo" src="../images/logo.jpg" alt="" />
     </footer>
 
-    <!-- <script type="module" src="../index.js"></script> -->
     <script src="../src/shop.js"></script>
   </body>
 </html>

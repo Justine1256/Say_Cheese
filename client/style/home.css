@@ -1,8 +1,10 @@
 :root {
+  --brand-color: #e7b10a;
+  --background-color: #4c4b16;
   --primary-color: #f7f1e5;
   --secondary-color: #e7b10a;
-  --title-color: #898121;
   --text-color: #4c4b16;
+  --customed-black: #white;
 }
 @font-face {
   font-family: comfortaa;
@@ -1207,4 +1209,14 @@ td {
   & ::placeholder {
     color: var(--primary-color) !important;
   }
+}
+
+.disabled {
+  color: #cacaca;
+  & :hover {
+    border: none !important;
+  }
+}
+.active {
+  color: var(--brand-color);
 }

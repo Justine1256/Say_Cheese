@@ -98,7 +98,7 @@ function updatePaginationProd(data: any[]) {
     }
 
     for (var i = 2; i < pageButtons.length - 1; i++) {
-      if (i === currentPage) {
+      if (i == currentPage) {
         pageButtons[i].classList.add("active");
       } else {
         pageButtons[i].classList.remove("active");

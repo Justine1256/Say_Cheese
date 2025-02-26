@@ -409,7 +409,7 @@
       "likes": 83,
       "tags": [
         "Đặc trưng",
-        "Món mới"
+        "Mới nhất"
       ],
       "created_at": "23/02/2024",
       "ordered": 3
@@ -993,7 +993,7 @@
       "stock": 12,
       "price": 40000,
       "tags": [
-        "Món mới",
+        "Mới nhất",
         "Bán chạy"
       ],
       "likes": 0,
@@ -1014,7 +1014,7 @@
         }
       ],
       "tags": [
-        "Món mới",
+        "Mới nhất",
         "Bán chạy"
       ],
       "likes": 0,
@@ -1035,7 +1035,7 @@
       "stock": 34,
       "price": 40000,
       "tags": [
-        "Món mới",
+        "Mới nhất",
         "Đặc trưng"
       ],
       "likes": 0,
@@ -1056,7 +1056,7 @@
       "stock": 22,
       "price": 50000,
       "tags": [
-        "Món mới",
+        "Mới nhất",
         "Bán chạy"
       ],
       "likes": 0,
@@ -1077,7 +1077,7 @@
       "stock": 45,
       "price": 50000,
       "tags": [
-        "Món mới"
+        "Mới nhất"
       ],
       "likes": 0,
       "ordered": 0,
@@ -1097,7 +1097,7 @@
       "stock": 123,
       "price": 40000,
       "tags": [
-        "Món mới"
+        "Mới nhất"
       ],
       "likes": 0,
       "ordered": 0,
@@ -1117,7 +1117,7 @@
       "stock": 1,
       "price": 1,
       "tags": [
-        "Món mới"
+        "Mới nhất"
       ],
       "likes": 0,
       "ordered": 0,

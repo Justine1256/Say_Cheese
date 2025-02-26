@@ -23,6 +23,8 @@ console.log(alllistShop);
 var currentPage = 1;
 var productsPerPage = 9;
 var products: Product[] = [];
+var categories: Category[] = [];
+let filteredProducts: Product[] = []; // Declare a separate array for filtered products
 
 // Pagination buttons
 var beginPageBtn = document.getElementById("begin-btn") as HTMLElement;
@@ -36,7 +38,7 @@ if (previousPageBtn) {
     e.preventDefault();
     if (currentPage > 1) {
       currentPage--;
-      showShopList(products);
+      showShopList(filteredProducts.length > 0 ? filteredProducts : products); // Use filtered products if available
     }
   });
 }
@@ -44,11 +46,14 @@ if (previousPageBtn) {
 if (nextPageBtn) {
   nextPageBtn.addEventListener("click", function (e) {
     e.preventDefault();
-    var totalPages = Math.ceil(products.length / productsPerPage);
+    var totalPages = Math.ceil(
+      (filteredProducts.length > 0 ? filteredProducts : products).length /
+        productsPerPage
+    );
 
     if (currentPage < totalPages) {
       currentPage++;
-      showShopList(products);
+      showShopList(filteredProducts.length > 0 ? filteredProducts : products); // Use filtered products if available
     }
   });
 }
@@ -56,21 +61,20 @@ if (nextPageBtn) {
 if (beginPageBtn) {
   beginPageBtn.addEventListener("click", function (e) {
     e.preventDefault();
-    if (currentPage > 1) {
-      currentPage = 1;
-      showShopList(products);
-    }
+    currentPage = 1; // Reset to first page
+    showShopList(filteredProducts.length > 0 ? filteredProducts : products); // Use filtered products if available
   });
 }
 
 if (endPageBtn) {
   endPageBtn.addEventListener("click", function (e) {
     e.preventDefault();
-    var totalPages = Math.ceil(products.length / productsPerPage);
-    if (currentPage < totalPages) {
-      currentPage = totalPages;
-      showShopList(products);
-    }
+    var totalPages = Math.ceil(
+      (filteredProducts.length > 0 ? filteredProducts : products).length /
+        productsPerPage
+    );
+    currentPage = totalPages; // Go to last page
+    showShopList(filteredProducts.length > 0 ? filteredProducts : products); // Use filtered products if available
   });
 }
 
@@ -83,12 +87,28 @@ async function APIGetProducts() {
     const data: Product[] = await res.json();
     products = data; // Store fetched products for pagination
     showShopList(data);
-    // console.log(products);
+    return data;
   } catch (error) {
     console.log("Error fetching products:", error);
   }
 }
 APIGetProducts();
+
+/**
+ * Function to call API and show products
+ */
+async function APIGetCategories() {
+  try {
+    const res = await fetch("http://localhost:3000/categories");
+    const data: Category[] = await res.json();
+    categories = data; // Store fetched products for pagination
+    showCategories(data);
+    return data;
+  } catch (error) {
+    console.log("Error fetching products:", error);
+  }
+}
+APIGetCategories();
 
 function updatePaginationProd(data: any[]) {
   var pagination = document.getElementById("product-pagination");
@@ -96,34 +116,63 @@ function updatePaginationProd(data: any[]) {
     var pageButtons = pagination.getElementsByTagName("a");
 
     if (currentPage === 1) {
+      pageButtons[0].classList.remove("active");
+      pageButtons[1].classList.remove("active");
       pageButtons[0].classList.add("disabled");
       pageButtons[1].classList.add("disabled");
     } else {
       pageButtons[0].classList.remove("disabled");
       pageButtons[1].classList.remove("disabled");
-    }
-
-    for (var i = 2; i < pageButtons.length - 1; i++) {
-      if (i === currentPage) {
-        pageButtons[i].classList.add("active");
-      } else {
-        pageButtons[i].classList.remove("active");
-      }
+      pageButtons[0].classList.add("active");
+      pageButtons[1].classList.add("active");
     }
 
     var totalPages = Math.ceil(data.length / productsPerPage);
+
     if (currentPage === totalPages) {
-      pageButtons[pageButtons.length - 1].classList.add("disabled");
+      pageButtons[2].classList.remove("active");
+      pageButtons[3].classList.remove("active");
+      pageButtons[2].classList.add("disabled");
+      pageButtons[3].classList.add("disabled");
     } else {
-      pageButtons[pageButtons.length - 1].classList.remove("disabled");
+      pageButtons[2].classList.remove("disabled");
+      pageButtons[3].classList.remove("disabled");
+      pageButtons[2].classList.add("active");
+      pageButtons[3].classList.add("active");
     }
   } else {
     console.log("Không tìm thấy element #product-pagination");
   }
 }
+
+/**
+ * Show list of categories
+ */
+const showCategories = (data: Category[]) => {
+  const categoriesList = document.getElementById(
+    "menu-cate"
+  ) as HTMLUListElement;
+  data.forEach((cate) => {
+    const li = `<li><a href="shop.html?id=${cate.id}">${cate.name}</a></li>`;
+    categoriesList.innerHTML += li;
+  });
+};
+
 /**
  * Show the list of products
  */
+const sortProducts = (criteria: string) => {
+  console.log("Sorting products by:", criteria); // Debugging line
+
+  if (criteria === "price-high") {
+    products.sort((a, b) => a.price - b.price);
+  } else if (criteria === "name") {
+    products.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (criteria === "price-low") {
+    products.sort((a, b) => b.price - a.price);
+  }
+};
+
 const showShopList = (data: Product[]) => {
   var startIndex = (currentPage - 1) * productsPerPage;
   var endIndex = startIndex + productsPerPage;
@@ -136,10 +185,6 @@ const showShopList = (data: Product[]) => {
     } to ${endIndex} of ${data.length} results`;
   }
   if (!alllistShop) return;
-
-  var startIndex = (currentPage - 1) * productsPerPage;
-  var endIndex = startIndex + productsPerPage;
-  var pageProducts = data.slice(startIndex, endIndex);
 
   alllistShop.innerHTML = pageProducts
     .map(
@@ -160,220 +205,94 @@ const showShopList = (data: Product[]) => {
 
   // Update product count and pagination
   if (productCountElement) {
+    if (endIndex > data.length) {
+      endIndex = data.length;
+    }
     productCountElement.textContent = `Showing ${
       startIndex + 1
     } to ${endIndex} of ${data.length} results`;
   }
-  updatePaginationProd(data);
+  updatePaginationProd(data); // Update pagination after sorting
 };
+
 /**
- * Lọc sản phẩm theo danh mục
+ * Filter products by category
  */
 const getCateId = (param: string) => {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(param);
 };
+async function cateFilter(id: string) {
+  try {
+    const res = await fetch("http://localhost:3000/categories");
+    const data: Category[] = await res.json();
+    const category = data.find((c: Category) => c.id === id)?.name || "";
+    console.log(category);
 
-if (getCateId("id") != null) {
-  console.log(getCateId("id"));
-
-  // addToCart(parseInt(id));
-  /**
-   * Lấy dữ liệu bảng sản phẩm từ API
-   */
-  async function getFilteredProducts(id: number) {
-    try {
-      const cate_res = await fetch("http://localhost:3000/category");
-      const cate_data = await cate_res.json();
-      const category = cate_data.find((c: any) => c.id === id)?.name; // Use optional chaining to handle null case
-
-      const res = await fetch(
-        "http://localhost:3000/products?cate_id=" + category
+    if (filteredProducts.length > 0) {
+      filteredProducts = filteredProducts.filter(
+        (p: Product) => p.category === category
       );
-      const data = await res.json();
-      showShopList(data);
-    } catch (error) {
-      console.log("Error fetching categories:", error);
+    } else {
+      products = products.filter((p: Product) => p.category === category);
     }
+
+    const finalProducts =
+      filteredProducts.length > 0 ? filteredProducts : products;
+
+    if (finalProducts.length > 0) {
+      showShopList(finalProducts);
+    } else {
+      console.log("No products found for this category.");
+    }
+
+    if (filteredProducts.length > 0) {
+      showShopList(filteredProducts);
+    } else {
+      console.log("No products found for this category.");
+    }
+  } catch (error) {
+    console.log("Error fetching categories:", error);
   }
-  getFilteredProducts(parseInt(getCateId("id") ?? "0")); // Use null coalescing operator to provide a default value
+}
+let cateId = getCateId("id"); // Remove the type annotation and let TypeScript infer the type
+
+if (cateId != null) {
+  cateFilter(cateId);
+} else {
+  showShopList(products);
 }
 
-// /**
-//  * Hiển thị sản phẩm trong giỏ hàng
-//  */
-// var showCart = async (cart: any[]) => {
-//   const cartBody = document.getElementById("cart-body") as HTMLElement;
+/**
+ * Filter products by tags
+ */
+const filterList = document.getElementById("filterList") as HTMLSelectElement;
+const sortList = document.getElementById("sortList") as HTMLSelectElement;
 
-//   cart.forEach((item) => {
-//     const cartItem = `<tr>
-//       <td class="product-remove">
-//         <button class="delete-cart" data="${item.id}">
-//           <img src="../IMG/trash-bin.png"/>
-//         </button>
-//       </td>
-//       <td class="product-thumb">
-//         <a href="product-details.html">
-//           <img src="${item.img}" alt="${item.name}" />
-//         </a>
-//       </td>
-//       <td class="product-name">
-//         <a href="product-details.html?id=${item.id}">${item.name}</a>
-//       </td>
-//       <td class="product-price">${item.price}</td>
-//       <td class="product-quantity">
-//         <input
-//           type="number"
-//           name="quantity"
-//           id="quantity-${item.id}"
-//           value="${item.quantity}"
-//           min="1"
-//           max="100"
-//           onchange="updateProductTotal(${item.id})"
-//         />
-//       </td>
-//       <td id="product-total-${item.id}"></td>
-//     </tr>`;
-//     cartBody.insertAdjacentHTML("beforeend", cartItem);
-//   });
+const filterProducts = async () => {
+  console.log("Filter products function called"); // Debugging line
 
-//   const deleteCartBtn = document.querySelectorAll(".delete-cart");
-//   deleteCartBtn.forEach((btn) => {
-//     btn.addEventListener("click", (event) => {
-//       event.preventDefault();
+  // Call sortProducts with the selected criteria
+  const selectedSort = sortList.value;
+  console.log("Selected sort option:", selectedSort); // Debugging line
 
-//       // Get the data attribute value
-//       const dataValue = btn.getAttribute("data");
+  sortProducts(selectedSort);
 
-//       // Check if dataValue is not null before parsing
-//       if (dataValue !== null) {
-//         deleteCart(parseInt(dataValue));
-//       } else {
-//         console.error("Data attribute 'data' is missing on the button.");
-//       }
-//     });
-//   });
+  filteredProducts = products; // Initialize with all products
 
-//   const cartBtn = document.querySelectorAll(".cartBtn");
-//   cartBtn.forEach((btn) => {
-//     btn.addEventListener("click", (event) => {
-//       event.preventDefault();
+  const selectedTag = filterList.value; // Corrected to avoid redeclaration
+  if (selectedTag === "Tất cả" || selectedTag === null) {
+    filteredProducts = products; // Show all products
+    currentPage = 1; // Reset to first page when showing all products
+  } else {
+    filteredProducts = products.filter((product) =>
+      product.tags.includes(selectedTag)
+    );
+  }
 
-//       // Get data attribute value
-//       const dataValue = btn.getAttribute("data");
+  showShopList(filteredProducts); // Update the displayed product list
+  updatePaginationProd(filteredProducts); // Update pagination based on filtered products
+};
 
-//       // Check if dataValue is not null before parsing
-//       if (dataValue !== null) {
-//         addToCart(parseInt(dataValue));
-//       } else {
-//         console.error("Data attribute 'data' is missing on the button.");
-//       }
-//     });
-//   });
-// };
-
-// /**
-//  * Thêm vào giỏ hàng
-//  */
-// const addToCart = async (i: number) => {
-//   try {
-//     const res = await fetch("http://localhost:3000/products/" + i);
-//     const data = await res.json();
-//     const selectProduct = data;
-
-//     const product: any = {
-//       id: selectProduct.id,
-//       name: selectProduct.name,
-//       cate_id: selectProduct.cate_id,
-//       img: selectProduct.img,
-//       price: selectProduct.price,
-//       quantity: 1,
-//     };
-
-//     fetch("http://localhost:3000/cart/", {
-//       headers: {
-//         "content-type": "application/json",
-//       },
-//       method: "POST",
-//       body: JSON.stringify(product),
-//     })
-//       .then((res) => {
-//         console.log(res);
-//       })
-//       .catch((error) => {
-//         console.log(error);
-//       });
-
-//     alert("Thêm vào giỏ hàng thành công");
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-// /**
-//  * Xóa sản phẩm trong giỏ hàng
-//  */
-// const deleteCart = async (id: number) => {
-//   if (confirm("Bạn có chắc chắn muốn xóa?")) {
-//     fetch("http://localhost:3000/cart/" + id, {
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       method: "DELETE",
-//     })
-//       .then((res) => console.log(res))
-//       .catch((error) => console.log(error));
-//   }
-// };
-
-// /**
-//  * Update số lượng sản phẩm và giá
-//  */
-// const updateProductTotal = async (id: number) => {
-//   const res = await fetch("http://localhost:3000/cart/" + id);
-//   const data = await res.json();
-//   const selectProduct = data;
-//   const quantity = parseInt(
-//     (document.getElementById(`quantity-${id}`) as HTMLInputElement).value
-//   );
-
-//   selectProduct.quantity = quantity;
-
-//   fetch("http://localhost:3000/cart/" + id, {
-//     headers: {
-//       "content-type": "application/json",
-//     },
-//     method: "PATCH",
-//     body: JSON.stringify(selectProduct),
-//   })
-//     .then((res) => console.log(res))
-//     .catch((error) => console.log(error));
-// };
-
-// /**
-//  * Hiển thị danh sách danh mục ở select
-//  */
-// const showCateListMenu = (data: any[]) => {
-//   const list = document.querySelectorAll(".menu-cate");
-//   list.forEach((item) => {
-//     data.forEach((element) => {
-//       const cate = `
-//           <li>
-//           <a href="shop.html?id=${element.id}">${element.name}</a>
-//           </li>
-//           `;
-//       item.innerHTML += cate;
-//     });
-//   });
-// };
-
-// async function getCategoriesList(showCateList: any) {
-//   try {
-//     const res = await fetch("http://localhost:3000/category");
-//     const data = await res.json();
-//     showCateListMenu(data);
-//     return data;
-//   } catch (error) {
-//     console.log("Error fetching categories:", error);
-//   }
-// }
+filterList.addEventListener("change", filterProducts);
+sortList.addEventListener("change", filterProducts);
