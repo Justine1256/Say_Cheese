@@ -84,22 +84,6 @@ const getSelectedTags = () => {
   return selectedValues;
 };
 
-/**
- * Function to call API and show products
- */
-async function APIGetProducts() {
-  try {
-    const res = await fetch("http://localhost:3000/products");
-    const data: Product[] = await res.json();
-    products = data; // Store fetched products for pagination
-    showProductList(data);
-    // console.log(products);
-  } catch (error) {
-    console.log("Error fetching products:", error);
-  }
-}
-APIGetProducts();
-
 function updatePaginationProd(data: any[]) {
   var pagination = document.getElementById("product-pagination");
   if (pagination) {
@@ -183,6 +167,21 @@ const showProductList = (data: Product[]) => {
   }
   updatePaginationProd(data);
 };
+/**
+ * Function to call API and show products
+ */
+async function APIGetProducts() {
+  try {
+    const res = await fetch("http://localhost:3000/products");
+    const data: Product[] = await res.json();
+    products = data; // Store fetched products for pagination
+    showProductList(data);
+    // console.log(products);
+  } catch (error) {
+    console.log("Error fetching products:", error);
+  }
+}
+APIGetProducts();
 
 /**
  * Function to redirect to add-product page and show editing product's details

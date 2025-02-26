@@ -19,7 +19,7 @@ function parseDatee(date: string) {
   return new Date(year, month - 1, day);
 }
 /**
- * Lọc sản phẩm bánh/trà/sữa
+ * Filter egg waffles/milk/tea
  */
 async function threeColsFilter() {
   try {
@@ -52,14 +52,16 @@ async function threeColsFilter() {
     });
     sua_beo.splice(3);
     sua_beo.forEach((element: Product) => {
-      const prod = `<div class="best-prod">
+      const prod = `
+      <a href="product-details.html?id=${element.id}">
+      <div class="best-prod" role="article">
       <div class="product">
         <div class="overflow-hidden">
-          <img src="${element.images[0].url}" alt="" />
-          <img class="tag" src="../images/hot.png" alt="" />
+          <img src="${element.images[0].url}" alt="${element.images[0].alt}" />
+          <img class="tag" src="../images/hot.png" alt="Hot product tag" />
         </div>
         <div class="bst-prod-content">
-          <a href="">${element.name}</a>
+          <a href="product-details.html?id=${element.id}">${element.name}</a>
            <a class="category-link" href="">${element.category}</a>
            <div style="display:flex; align-items: center; justify-content: space-between;">
             <p>${element.price}đ</p>
@@ -67,7 +69,9 @@ async function threeColsFilter() {
            </div>
          </div>
         </div>
-      </div>`;
+      </div>
+       </a>
+      `;
       sua_beo_container.innerHTML += prod;
     });
     // Bánh Trứng
@@ -78,14 +82,16 @@ async function threeColsFilter() {
     });
     banh_trung.splice(3);
     banh_trung.forEach((element: Product) => {
-      const prod = `<div class="best-prod">
+      const prod = `
+      <a href="product-details.html?id=${element.id}">
+      <div class="best-prod" role="article">
       <div class="product">
         <div class="overflow-hidden">
-          <img src="${element.images[0].url}" alt="" />
-          <img class="tag" src="../images/hot.png" alt="" />
+          <img src="${element.images[0].url}" alt="${element.images[0].alt}" />
+          <img class="tag" src="../images/hot.png" alt="Hot product tag" />
         </div>
         <div class="bst-prod-content">
-          <a href="">${element.name}</a>
+          <a href="product-details.html?id=${element.id}">${element.name}</a>
            <a class="category-link" href="">${element.category}</a>
                       <div style="display:flex; align-items: center; justify-content: space-between;">
             <p>${element.price}đ</p>
@@ -93,7 +99,9 @@ async function threeColsFilter() {
            </div>
          </div>
         </div>
-      </div>`;
+      </div>
+         </a>
+      `;
       banh_trung_container.innerHTML += prod;
     });
     // Trà thơm
@@ -104,22 +112,25 @@ async function threeColsFilter() {
     });
     tra_thom.splice(3);
     tra_thom.forEach((element: Product) => {
-      const prod = `<div class="best-prod">
+      const prod = `
+        <a href="product-details.html?id=${element.id}">
+    <div class="best-prod" role="article">
       <div class="product">
-        <div class="overflow-hidden">
-          <img src="${element.images[0].url}" alt="" />
-          <img class="tag" src="../images/hot.png" alt="" />
-        </div>
-        <div class="bst-prod-content">
-          <a href="">${element.name}</a>
-           <a class="category-link" href="">${element.category}</a>
-           <div style="display:flex; align-items: center; justify-content: space-between;">
+          <div class="overflow-hidden">
+            <img src="${element.images[0].url}" alt="${element.images[0].alt}" />
+            <img class="tag" src="../images/hot.png" alt="Hot product tag" />
+          </div>
+          <div class="bst-prod-content">
+            <a href="product-details.html?id=${element.id}">${element.name}</a>
+            <a class="category-link" href="">${element.category}</a>
+            <div style="display:flex; align-items: center; justify-content: space-between;">
             <p>${element.price}đ</p>
             <button class="cartBtn" data="${element.id}"><i class="bi bi-cart-fill"></i></button>
-           </div>
+          </div>
          </div>
-        </div>
-      </div>`;
+      </div>
+    </div>
+        </a>`;
       tra_thom_container.innerHTML += prod;
     });
     console.log(sua_beo);
@@ -128,6 +139,9 @@ async function threeColsFilter() {
   }
 }
 
+/**
+ * Fetch most liked products
+ */
 async function fetchMostlikesProducts() {
   try {
     const res = await fetch("http://localhost:3000/products");
@@ -140,15 +154,19 @@ async function fetchMostlikesProducts() {
     console.log(sortedData);
 
     sortedData.slice(0, 5).forEach((element: Product) => {
-      const prod = `<div class="product">
+      const prod = `
+      <a href="product-details.html?id=${element.id}">
+        <div class="product" role="article">
           <div class="overflow-hidden">
-            <img src="${element.images[0].url}" alt="" />
+            <img src="${element.images[0].url}" alt="${element.images[0].alt}" />
           </div>
-          <a href="#">${element.name}</a>
+          <a href="product-details.html?id=${element.id}">${element.name}</a>
           <a class="category-link" href="">${element.category}</a>
           <p>${element.price}đ</p>
           <button class="cartBtn" data="${element.id}">Thêm vào giỏ hàng</button>
-        </div>`;
+        </div>
+      </a>
+`;
       mostlikesContainer.innerHTML += prod;
     });
   } catch (error) {
@@ -156,6 +174,9 @@ async function fetchMostlikesProducts() {
   }
 }
 
+/**
+ * Fetch most ordered products
+ */
 async function fetchBestSellingProducts() {
   try {
     const res = await fetch("http://localhost:3000/products");
@@ -168,11 +189,12 @@ async function fetchBestSellingProducts() {
       (a: Product, b: Product) => b.ordered - a.ordered
     );
     sortedData.slice(0, 6).forEach((element: Product) => {
-      const prod = `<div class="best-prod">
+      const prod = `<div class="best-prod" role="article">
         <div class="product">
+        <a href="product-details.html?id=${element.id}">
           <div class="overflow-hidden">
-            <img src="${element.images[0].url}" alt="" />
-            <img class="tag" src="../images/hot.png" alt="" />
+            <img src="${element.images[0].url}" alt="${element.images[0].alt}" />
+            <img class="tag" src="../images/hot.png" alt="Hot product tag" />
           </div>
           <div class="bst-prod-content">
             <a href="">${element.name}</a>
@@ -182,6 +204,7 @@ async function fetchBestSellingProducts() {
             <button class="cartBtn" data="${element.id}"><i class="bi bi-cart-fill"></i></button>
            </div>
           </div>
+          </a>
         </div>
       </div>`;
       bestSellersContainer.innerHTML += prod;
